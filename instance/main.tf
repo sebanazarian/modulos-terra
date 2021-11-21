@@ -1,7 +1,7 @@
 provider "aws" {
   region = "us-east-1"
-  access_key="AKIAWGQC3M2GVMT37YNS"
-  secret_key= "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" 
+  access_key=""
+  secret_key= "" 
 
 }
 
@@ -26,7 +26,7 @@ resource "aws_security_group" "ssh_connection" {
     }
   }
   tags = {
-    Name = "allow_tls2"
+    Name = "allow_tls"
   }
 }
 
@@ -36,5 +36,16 @@ resource "aws_instance" "instancia-snazarian" {
   instance_type = var.instance_type
   tags          = var.tags
   security_groups = ["${aws_security_group.ssh_connection.name}"]  ##recurso.nombre.lo que espera la variable en este caso name
+  # CONEXION
+  # provisioner = "remote-exec"{
+  #   connection {
+  #     type = "ssh"
+  #     user = "ec2-user"
+  #     private_key="${file(-/.ssh/packer-key)}"
+  #     host = self.public_ip
+  #   }
+  # }
+
+  inline = ["docker run -it -d -p 80:80"]
 }
 
